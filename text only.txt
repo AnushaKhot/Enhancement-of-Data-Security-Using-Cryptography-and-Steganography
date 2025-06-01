@@ -1,0 +1,86 @@
+clc;
+clear all;
+disp('RSA cryptosystem');
+range_min = input('enter lower limit for primes: ');
+range_max = input('enter upper limit for primes: ');
+l = primes(range_max);
+l = l(l >= range_min);
+p = l(randperm(numel(l), 1));
+q = l(randperm(numel(l), 1));
+disp(['prime p   = ', num2str(p)]);
+disp(['prime q   = ', num2str(q)]);
+n = q * p;
+pause(1);
+disp(['n = p * q = ', num2str(n)]);
+pause(1);
+phi_n = ((p - 1) * (q - 1));
+disp(['φ(n)      = ', num2str(phi_n)]);
+e = 2;
+num = 0;
+for e = 2:(phi_n - 1)
+    if (gcd(e, phi_n) == 1)
+        num = num + 1;
+        list(num) = e;
+    end
+end
+e = list(randperm(numel(list), 1));
+pause(1);
+disp(['e = ', num2str(e)]);
+d = 0;
+while (mod(d * e, phi_n) ~= 1)
+    d = d + 1;
+end
+pause(1);
+disp(['d = ', num2str(d)]);
+pause(1);
+disp(['public key of the current system {', num2str(e), ' , ', num2str(n), '}']);
+pause(1);
+disp(['private key of the current system {', num2str(d), ' , ', num2str(n), '}']);
+pause(0.5);
+disp('----------------------------------------');
+pause(0.5)
+disp('----------------------------------------');
+pause(0.5)
+m = input('\nEnter message to be encrypted: ', 's');
+m_ascii = double(m);
+pause(0.5)
+disp('----------------------------------------');
+pause(0.5)
+disp('----------------------------------------');
+pause(0.5)
+disp('ASCII equivalent of the message');
+pause(0.5)
+disp(m_ascii);
+
+for i = 1:length(m_ascii)
+    encrypted_message(i) = powermod(m_ascii(i), e, n);
+    disp(['block ' num2str(i), ' of the message has been encrypted...']);
+    pause(0.5);
+end
+disp('encrypted message');
+disp(encrypted_message);
+pause(0.5)
+disp('----------------------------------------');
+pause(0.5)
+disp('----------------------------------------');
+disp('press a key to decrypt the message');
+pause;
+pause(0.5)
+disp('----------------------------------------');
+pause(0.5)
+disp('----------------------------------------');
+for i = 1:length(encrypted_message)
+    decrypted_message(i) = powermod(encrypted_message(i), d, n);
+    disp(['block ' num2str(i), ' of the message has been decrypted...']);
+    pause(0.5);
+end
+disp('ASCII equivalent of the decrypted message');
+disp(decrypted_message);
+pause(0.5)
+disp('----------------------------------------');
+pause(0.5)
+disp('----------------------------------------');
+pause(1)
+disp('decrypted message');
+disp(char(decrypted_message));
+
