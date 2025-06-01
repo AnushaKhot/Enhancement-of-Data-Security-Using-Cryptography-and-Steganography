@@ -1,0 +1,55 @@
+
+% Step 1: Load and display the original image
+originalImagePath = 'C:\Users\Anusha\Downloads\image (8).png'; % Replace with the actual path
+originalImage = imread(originalImagePath);
+figure;
+subplot(2, 3, 1);
+imshow(originalImage);
+title('Original Image');
+
+% Step 2: Perform LSB technique on the original image
+bitPlane = 1; % Choose the bit plane to hide the data (1 = least significant bit)
+hiddenBits = bitget(originalImage, bitPlane);
+
+% Visualize the hidden bits
+subplot(2, 3, 2);
+imshow(hiddenBits, []);
+colormap(gray);
+title('Hidden Bits');
+
+% Step 3: Load and display the cover image
+coverImagePath = 'C:\Users\Anusha\Downloads\image (7).png'; % Replace with the actual path
+coverImage = imread(coverImagePath);
+subplot(2, 3, 3);
+imshow(coverImage);
+title('Cover Image');
+
+% Step 4: Hide the original image in the cover image
+stegoImage = coverImage;
+stegoImage = bitset(stegoImage, bitPlane, hiddenBits);
+
+% Visualize the LSB operation
+subplot(2, 3, 4);
+imshow(stegoImage - coverImage, []);
+title('LSB Operation');
+
+% Display the stego image
+subplot(2, 3, 5);
+imshow(stegoImage);
+title('Stego Image');
+
+% Step 5: Extract the original image from the stego image
+extractedHiddenBits = bitget(stegoImage, bitPlane);
+extractedImage = uint8(bitset(originalImage, bitPlane, extractedHiddenBits));
+
+% Visualize the extracted hidden bits
+subplot(2, 3, 6);
+imshow(extractedHiddenBits, []);
+colormap(gray);
+title('Extracted Hidden Bits');
+
+% Display the extracted image
+figure;
+imshow(extractedImage);
+title('Extracted Image');
+
